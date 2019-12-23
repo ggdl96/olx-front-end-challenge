@@ -1,15 +1,18 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
+
 import { useAsyncFetch } from '../../../utils/axios';
 import { service } from '../../../entities/Property';
 import Article from '../../../common/Article';
 import Modal from '../../../common/Modal';
 import ContactForm from './forms/contact';
 import { getStatus } from '../../../foundations/properties';
+import Gallery from './components/Gallery';
 
 import { $grayLightColor } from '../../../styles/constants';
 
 const mainSectionWidth = '80%';
+const galleryContainerHeight = '200px';
 
 const SectionStyled = styled.section`
     display: flex;
@@ -39,7 +42,7 @@ const MainSectionRowStyled = styled.div`
 `;
 
 const GalleryContainer = styled.div`
-    height: 200px;
+    height: ${galleryContainerHeight};
 `;
 
 function renderGeneralPanel({ rooms, bedrooms, garages, m2, m2_covered, year }) {
@@ -57,7 +60,7 @@ function renderGeneralPanel({ rooms, bedrooms, garages, m2, m2_covered, year }) 
                 </>
             }
         />
-    )
+    );
 }
 
 function renderSidebar({
@@ -71,7 +74,6 @@ function renderSidebar({
 }, openContactModal) {
     function handleOnClickContact(event) {
         event.preventDefault();
-        console.log('open modal');
         openContactModal()
     }
 
@@ -97,23 +99,33 @@ function renderSidebar({
         </SideBarDetailStyled>
     )
 }
-function renderDetails({ data } = {}, openContactModal) {
+
+
+function Details({ data, openContactModal }) {
     const {
         description,
+        data: values,
     } = data;
 
     return (
         <>
             <MainSectionStyled>
-                main section
             <MainSectionRowStyled>
-                <GalleryContainer></GalleryContainer>
+                    <GalleryContainer>
+                        {
+                            values.images &&
+                            <Gallery
+                                values={values}
+                                imageStyle={{ height: galleryContainerHeight }}
+                            />
+                        }
+                    </GalleryContainer>
             </MainSectionRowStyled>
 
                 <MainSectionRowStyled>
                     <p>{description}</p>
                     <h2>Details</h2>
-                    {renderGeneralPanel(data)}
+                    {renderGeneralPanel(values)}
                     <Article
                         header="Amenities"
                         content={
@@ -125,7 +137,7 @@ function renderDetails({ data } = {}, openContactModal) {
                 </MainSectionRowStyled>
 
             </MainSectionStyled>
-            {renderSidebar(data, openContactModal)}
+            {renderSidebar(values, openContactModal)}
         </>
     )
 }
@@ -134,10 +146,8 @@ export default function PropertyDetail(props) {
     const id = props.match.params.id;
     const [response] = useAsyncFetch(service, { id });
     const [openContactModal, setOpenContactModal] = useState(false);
-    console.log(openContactModal);
 
     const onSubmitContactForm = () => {
-        console.log('submit');
         setOpenContactModal(false);
     }
     return (
@@ -145,7 +155,8 @@ export default function PropertyDetail(props) {
             {
                 response.isFetching
                     ? 'loading'
-                    : response.data && renderDetails(response, () => setOpenContactModal(true))
+                    : response.data &&
+                    <Details data={response} openContactModal={() => setOpenContactModal(true)} />
             }
             {
                 openContactModal
