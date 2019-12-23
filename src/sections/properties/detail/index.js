@@ -5,6 +5,7 @@ import { service } from '../../../entities/Property';
 import Article from '../../../common/Article';
 import Modal from '../../../common/Modal';
 import ContactForm from './forms/contact';
+import { getStatus } from '../../../foundations/properties';
 
 import { $grayLightColor } from '../../../styles/constants';
 
@@ -59,28 +60,35 @@ function renderGeneralPanel({ rooms, bedrooms, garages, m2, m2_covered, year }) 
     )
 }
 
-function renderSidebar({ currency, price, status, transaction_type, payment, tags }, openContactModal) {
+function renderSidebar({
+    currency,
+    price,
+    status,
+    transaction_type,
+    payment,
+    tags,
+    disposition,
+}, openContactModal) {
     function handleOnClickContact(event) {
         event.preventDefault();
         console.log('open modal');
         openContactModal()
     }
 
-    const statusMapper = {
-        available: 'disponible',
-        rented: 'rentado',
-        reserved: 'reservado',
-    }
-
     return (
         <SideBarDetailStyled>
             <MainSectionRowStyled>
-                <SpanItemStyled>{currency.name} {price}</SpanItemStyled>
-                <SpanItemStyled>{statusMapper[status]}</SpanItemStyled>
+                <h1>{currency.name} {price}</h1>
+                <SpanItemStyled>{getStatus(status)}</SpanItemStyled>
+            </MainSectionRowStyled>
+
+            <MainSectionRowStyled>
                 <SpanItemStyled>{`tipo: ${transaction_type.name}`}</SpanItemStyled>
                 <SpanItemStyled>Tipos de pago: {payment && payment.join(', ')}</SpanItemStyled>
+            </MainSectionRowStyled>
+            <MainSectionRowStyled>
                 <SpanItemStyled>Etiquetas: {tags && tags.join(', ')}</SpanItemStyled>
-                <SpanItemStyled>disposition</SpanItemStyled>
+                {disposition && <SpanItemStyled>disposición: {disposition.join(', ')}</SpanItemStyled>}
             </MainSectionRowStyled>
 
             <MainSectionRowStyled darker>
