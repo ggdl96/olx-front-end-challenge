@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom';
-import { configure } from 'mobx';
 
 import 'sanitize.css';
 import 'sanitize.css/forms.css';
@@ -10,8 +9,6 @@ import 'sanitize.css/typography.css';
 import './index.css';
 
 import App from './App';
-
-configure({ enforceActions: 'always' });
 
 ReactDOM.render(
     <BrowserRouter><App /></BrowserRouter>,
