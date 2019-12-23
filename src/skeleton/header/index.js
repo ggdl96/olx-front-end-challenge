@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import NavLinkList from '../../common/NavLinkList'
 
 import { $primaryColor, $alternativeColor } from '../../styles/constants';
 
@@ -15,7 +16,10 @@ const StyledHeader = styled.header`
 
 function Header() {
     return (
-        <StyledHeader />
+        <StyledHeader>
+            <NavLinkList
+                items={[{ key: 'link_to_properties', name: 'Propiedades', url: '/' }]} />
+            </StyledHeader>
     );
 }
 
