@@ -51,12 +51,12 @@ function renderGeneralPanel({ rooms, bedrooms, garages, m2, m2_covered, year }) 
             header="General"
             content={
                 <>
-                    {rooms && <SpanItemStyled>{`Rooms: ${rooms}`}</SpanItemStyled>}
-                    {bedrooms && <SpanItemStyled>{`Bed rooms: ${bedrooms}`}</SpanItemStyled>}
+                    {rooms && <SpanItemStyled>{`Habitaciones: ${rooms}`}</SpanItemStyled>}
+                    {bedrooms && <SpanItemStyled>{`Dormitorios: ${bedrooms}`}</SpanItemStyled>}
                     {garages && <SpanItemStyled>{`Garages: ${garages}`}</SpanItemStyled>}
-                    <SpanItemStyled>{`M2: ${m2}`}</SpanItemStyled>
-                    <SpanItemStyled>{`M2 covered: ${m2_covered}`}</SpanItemStyled>
-                    {year && <SpanItemStyled>{`Year: ${year}`}</SpanItemStyled>}
+                    {m2 && <SpanItemStyled>{`M2: ${m2}`}</SpanItemStyled>}
+                    {m2_covered && <SpanItemStyled>{`M2 cubiertos: ${m2_covered}`}</SpanItemStyled>}
+                    {year && <SpanItemStyled>{`Año: ${year}`}</SpanItemStyled>}
                 </>
             }
         />
@@ -86,11 +86,23 @@ function renderSidebar({
 
             <MainSectionRowStyled>
                 <SpanItemStyled>{`tipo: ${transaction_type.name}`}</SpanItemStyled>
-                <SpanItemStyled>Tipos de pago: {payment && payment.join(', ')}</SpanItemStyled>
+                {
+                    payment && payment.length
+                    ? <SpanItemStyled>Tipos de pago: {payment && payment.join(', ')}</SpanItemStyled>
+                    : null
+                }
             </MainSectionRowStyled>
             <MainSectionRowStyled>
-                <SpanItemStyled>Etiquetas: {tags && tags.join(', ')}</SpanItemStyled>
-                {disposition && <SpanItemStyled>disposición: {disposition.join(', ')}</SpanItemStyled>}
+                {
+                    tags && tags.length
+                    ? <SpanItemStyled>Etiquetas: {tags && tags.join(', ')}</SpanItemStyled>
+                    : null
+                }
+                {
+                    disposition && disposition.length
+                    ? <SpanItemStyled>disposición: {disposition.join(', ')}</SpanItemStyled>
+                    : null
+                }
             </MainSectionRowStyled>
 
             <MainSectionRowStyled darker>
@@ -114,20 +126,22 @@ function Details({ data, openContactModal }) {
                     <GalleryContainer>
                         {
                             values.images &&
+                            values.images.length ?
                             <Gallery
                                 values={values}
                                 imageStyle={{ height: galleryContainerHeight }}
                             />
+                            : null
                         }
                     </GalleryContainer>
             </MainSectionRowStyled>
 
                 <MainSectionRowStyled>
                     <p>{description}</p>
-                    <h2>Details</h2>
+                    <h2>Detalle</h2>
                     {renderGeneralPanel(values)}
                     <Article
-                        header="Amenities"
+                        header="Comodidades"
                         content={
                             <>
                             </>
