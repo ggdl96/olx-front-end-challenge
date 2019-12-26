@@ -8,14 +8,23 @@ const ModalContainer = styled.div`
     background: #FFF;
     margin-left: calc(50% - 300px);
     border-radius: 6px;
+`;
+
+const ModalHeader = styled.header`
+    display: flex;
+    justify-content: end;
 `
+
+const SpanStyled = styled.span`
+    cursor: pointer;
+`;
 export default function({ content, onCloseModal }) {
     const onClose = () => {
         onCloseModal();
     }
     return (
         <ModalContainer>
-            <header><span onClick={onClose}>[x]</span></header>
+            <ModalHeader><SpanStyled onClick={onClose}>[x]</SpanStyled></ModalHeader>
             {content}
         </ModalContainer>
     );

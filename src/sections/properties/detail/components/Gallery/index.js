@@ -25,6 +25,8 @@ const NavGalleryContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: start;
+    scroll-behavior: smooth;
+    overflow-x: auto;
 `;
 
 export default function({ values, imageStyle }) {
