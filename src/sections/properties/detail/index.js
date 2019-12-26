@@ -146,9 +146,37 @@ export default function PropertyDetail(props) {
     const id = props.match.params.id;
     const [response] = useAsyncFetch(service, { id });
     const [openContactModal, setOpenContactModal] = useState(false);
+    const [formValues, setFormValues] = useState({});
+    const [formValidValues, setFormValidValues] = useState({ name: true, email: true, message: true });
 
-    const onSubmitContactForm = () => {
-        setOpenContactModal(false);
+    const onSubmitContactForm = (values) => {
+        const nameValidations = name => name && name.length && name.length < 150
+            ? /([a-zA-ZäÄëËöÖÜüáéíóú])/g.test(name)
+            : false;
+
+        const emailValidations = email => email && email.length >= 3;
+
+        const messageValidations = message => message && message.length && message.length <= 500;
+
+        let invalidFields = {};
+
+        if (!nameValidations(values.name)) {
+            invalidFields = {...invalidFields, name: false };
+        } 
+        
+        if (!emailValidations(values.email)) {
+            invalidFields = { ...invalidFields, email: false };
+        }
+
+        if (!messageValidations(values.message)) {
+            invalidFields = { ...invalidFields, message: false };
+        }
+
+        if (Object.keys(invalidFields).length === 0) {
+            setOpenContactModal(false);
+        } else {
+            setFormValidValues({...setFormValidValues});
+        }
     }
     return (
         <SectionStyled>
@@ -160,10 +188,19 @@ export default function PropertyDetail(props) {
             }
             {
                 openContactModal
-                    && <Modal
-                            content={<ContactForm onSubmit={onSubmitContactForm}/>}
+                    && (<Modal
+                            content={
+                            <ContactForm
+                                onSubmit={() => onSubmitContactForm(formValues)}
+                                values={formValues}
+                                onChange={(props) => {
+                                    setFormValues({ ...formValues, ...props })
+                                }}
+                                validFields={formValidValues}
+                            />
+                        }
                             onCloseModal={() => setOpenContactModal(false)}
-                        />
+                        />)
             }
         </SectionStyled>
     )

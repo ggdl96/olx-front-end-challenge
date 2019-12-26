@@ -7,7 +7,7 @@ const FormContent = styled.div`
     justify-content: space-between;
 `
 
-export default function Form({ content, onSubmit, onSuccess, onFailure }) {
+export default function Form({ content, onSubmit, onSuccess, onFailure, submitLabel }) {
     const handleOnSubmit = (event) => {
         event.preventDefault();
         onSubmit();
@@ -18,7 +18,7 @@ export default function Form({ content, onSubmit, onSuccess, onFailure }) {
                 {content}
             </FormContent>
 
-            <input type="submit" onClick={handleOnSubmit} value="Consultar"/>
+            <input type="submit" onClick={handleOnSubmit} value={submitLabel}/>
         </form>
     )
-}
+};

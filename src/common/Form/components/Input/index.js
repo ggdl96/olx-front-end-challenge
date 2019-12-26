@@ -12,24 +12,35 @@ const InputStyled = styled.input`
     }
 `;
 
-const Input = ({ label, defaultValue, onChange, placeholder, type }) => {
+const Input = ({
+    id,
+    label,
+    defaultValue,
+    onChange,
+    placeholder,
+    type,
+    validationMessage,
+    isIvalid,
+}) => {
 
     return (
         <>
             <label>{label}</label>
             <InputStyled
+                key={id}
                 defaultValue={defaultValue}
-                onChange={onChange}
+                onChange={(event) => onChange({ [id]: event.target.value })}
                 placeholder={placeholder}
                 type={type}
             />
+            {!isIvalid ? validationMessage || <span>not valid</span> : null}
         </>
     );
 };
 
 Input.propTypes = {
     label: PropTypes.string,
-    defaultValue: PropTypes.string.isRequired,
+    defaultValue: PropTypes.string,
     onChange: PropTypes.func.isRequired,
     placeholder: PropTypes.string,
     type: PropTypes.oneOf([
@@ -37,13 +48,19 @@ Input.propTypes = {
         'number',
         'password',
         'email'
-    ])
+    ]),
+    id: PropTypes.string.isRequired,
+    validationMessage: PropTypes.string,
+    isIvalid: PropTypes.bool,
 };
 
 Input.defaultProps = {
     label: null,
     placeholder: null,
-    type: 'text'
+    type: 'text',
+    defaultValue: '',
+    validationMessage: null,
+    isIvalid: false,
 };
 
 export default Input;
