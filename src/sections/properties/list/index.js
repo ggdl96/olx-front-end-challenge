@@ -4,6 +4,7 @@ import { service } from '../../../entities/Property';
 import {useAsyncFetch} from '../../../utils/axios';
 import CustomLink from '../../../common/CustomLink';
 import { getStatus } from '../../../foundations/properties';
+import ImageContained from '../../../common/ImageContained'
 
 import { $grayLightColor } from '../../../styles/constants';
 
@@ -38,12 +39,6 @@ const ImageContainer = styled.div`
     display: flex;
 `
 
-const Image = styled.img`
-    width: ${imageContainerDimensions.width};
-    height: ${imageContainerDimensions.height};
-    object-fit: cover;
-`;
-
 const InfoContainer = styled.div`
     display: flex;
     flex-wrap: wrap;
@@ -68,7 +63,16 @@ function renderPropertyItem(item) {
     return (
         <CustomLink key={item.id} to={`/${item.id}`} tag={ListItemStyled}>
             <ImageContainer>
-                {item.images && item.images[0] && item.images[0].medium ? <Image src={item.images[0].medium} alt="img"></Image> : null}
+                {
+                    item.images && item.images[0] && item.images[0].medium ?
+                        <ImageContained
+                            src={item.images[0].medium}
+                            alt="img"
+                            height={imageContainerDimensions.height}
+                            width={imageContainerDimensions.width}
+                        />
+                        : null
+                }
             </ImageContainer>
             <InfoContainer>
                 <InfoContainerTitle>{item.title}</InfoContainerTitle>

@@ -2,10 +2,29 @@ import React, { useState } from 'react';
 import ImageZoom from 'react-medium-image-zoom';
 import styled from 'styled-components';
 
-const buttonsHeight = '20px';
+import ImageContained from '../../../../../common/ImageContained';
+
+import { $secondaryColor } from '../../../../../styles/constants';
+
+const buttonContainerHeight = '50px';
+const buttonDimension = '40px';
 
 const ImageButton = styled.button`
-    height: ${buttonsHeight};
+    height: ${buttonDimension};
+    padding: 0px;
+    text-align: center;
+    line-height: 1px;
+    vertical-align: middle;
+
+    :active {
+        border: 1px ${$secondaryColor} solid;
+    }
+`;
+
+const NavGalleryContainer = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: start;
 `;
 
 export default function({ values, imageStyle }) {
@@ -27,7 +46,9 @@ export default function({ values, imageStyle }) {
                 defaultStyles={{
                     image: {
                         width: !isImageZoomed ? '100%' : 'unset',
-                        height: !isImageZoomed ? `calc(${imageStyle.height} - ${buttonsHeight})` : 'unset',
+                        height: !isImageZoomed
+                            ? `calc(${imageStyle.height} - ${buttonContainerHeight})`
+                            : 'unset',
                         'objectFit': 'cover',
                     },
                 }}
@@ -35,13 +56,20 @@ export default function({ values, imageStyle }) {
                 onZoom={() => setIsImageZoomed(true)}
                 onUnzoom={() => setIsImageZoomed(false)}
             />
-            <div>
+            <NavGalleryContainer>
                 {
                     values.images.map((image, index) =>
-                        <ImageButton onClick={() => setImageIndex(index)}>.</ImageButton>
+                        <ImageButton key={index} onClick={() => setImageIndex(index)}>
+                            <ImageContained
+                                src={values.images[index].small}
+                                alt="thumbnail"
+                                height={buttonDimension}
+                                width={buttonDimension}
+                            />
+                        </ImageButton>
                     )
                 }
-            </div>
+            </NavGalleryContainer>
         </>
     );
 }

@@ -12,7 +12,7 @@ import Gallery from './components/Gallery';
 import { $grayLightColor } from '../../../styles/constants';
 
 const mainSectionWidth = '80%';
-const galleryContainerHeight = '200px';
+const galleryContainerHeight = '280px';
 
 const SectionStyled = styled.section`
     display: flex;
