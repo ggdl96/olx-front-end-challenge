@@ -28,6 +28,7 @@ const Input = ({
     isIvalid,
 }) => {
 
+    const valid = isIvalid === 'undefined' || !validationMessage;
     return (
         <>
             <label>{label}</label>
@@ -39,7 +40,7 @@ const Input = ({
                 type={type}
             />
             {
-                !isIvalid
+                !valid
                     ? <InputSpanError>{validationMessage || 'campo no válido'}</InputSpanError>
                     : null
             }

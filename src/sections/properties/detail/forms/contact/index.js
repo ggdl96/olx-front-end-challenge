@@ -12,19 +12,19 @@ export default function ContactForm({ onSubmit, onFailure, values, onChange, inv
                         id='name'
                         label="Nombre:"
                         onChange={(props) => onChange(props)}
-                        isIvalid={!invalidValues.name}
+                        validationMessage={invalidValues.name}
                     />
                     <Input
                         id='email'
                         label="Email:"
                         onChange={(props) => onChange(props)}
-                        isIvalid={!invalidValues.email}
+                        validationMessage={invalidValues.email}
                     />
                     <Input
                         id="message"
                         label="Mensaje:"
                         onChange={(props) => onChange(props)}
-                        isIvalid={!invalidValues.message}
+                        validationMessage={invalidValues.message}
                     />
                 </>
             }
