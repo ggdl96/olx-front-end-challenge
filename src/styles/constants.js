@@ -5,3 +5,4 @@ export const $defaultLinkColor = '#494949';
 export const $defaultBackground = '#EFF0F1';
 export const $defaultLinkActiveColor = '#34DDE6';
 export const $grayLightColor = '#E0E0E0'
+export const $dangerColor = '#FF0000C4';

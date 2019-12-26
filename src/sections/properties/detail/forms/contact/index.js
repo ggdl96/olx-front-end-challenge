@@ -3,7 +3,7 @@ import Form from '../../../../../common/Form';
 import Input from '../../../../../common/Form/components/Input';
 
 
-export default function ContactForm({ onSubmit, onFailure, values, onChange, validFields }) {
+export default function ContactForm({ onSubmit, onFailure, values, onChange, invalidValues }) {
     return (
         <Form
             content={
@@ -11,23 +11,20 @@ export default function ContactForm({ onSubmit, onFailure, values, onChange, val
                     <Input
                         id='name'
                         label="Nombre:"
-                        value={values.name}
                         onChange={(props) => onChange(props)}
-                        isIvalid={validFields.name}
+                        isIvalid={!invalidValues.name}
                     />
                     <Input
                         id='email'
                         label="Email:"
-                        value={values.email}
                         onChange={(props) => onChange(props)}
-                        isIvalid={validFields.email}
+                        isIvalid={!invalidValues.email}
                     />
                     <Input
                         id="message"
                         label="Mensaje:"
-                        value={values.message}
                         onChange={(props) => onChange(props)}
-                        isIvalid={validFields.message}
+                        isIvalid={!invalidValues.message}
                     />
                 </>
             }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 
 import { useAsyncFetch } from '../../../utils/axios';
@@ -140,14 +140,19 @@ function Details({ data, openContactModal }) {
                     <p>{description}</p>
                     <h2>Detalle</h2>
                     {renderGeneralPanel(values)}
-                    <Article
-                        header="Comodidades"
-                        content={
-                            <>
-                            </>
-                        }
-                    />
-
+                    {
+                        values.amenities && values.amenities.length
+                        ? (
+                            <Article
+                                header="Comodidades"
+                                content={
+                                    <SpanItemStyled>
+                                        {values.amenities.map(amenity => amenity.name).join(', ')}
+                                    </SpanItemStyled>
+                                }
+                            />
+                        ) : null
+                    }
                 </MainSectionRowStyled>
 
             </MainSectionStyled>
@@ -159,9 +164,11 @@ function Details({ data, openContactModal }) {
 export default function PropertyDetail(props) {
     const id = props.match.params.id;
     const [response] = useAsyncFetch(service, { id });
-    const [openContactModal, setOpenContactModal] = useState(false);
-    const [formValues, setFormValues] = useState({});
-    const [formValidValues, setFormValidValues] = useState({ name: true, email: true, message: true });
+    const [modalState, setModalState] = useState({
+        isOpen: false,
+        values: {},
+        invalidValues: {}
+    });
 
     const onSubmitContactForm = (values) => {
         const nameValidations = name => name && name.length && name.length < 150
@@ -172,50 +179,52 @@ export default function PropertyDetail(props) {
 
         const messageValidations = message => message && message.length && message.length <= 500;
 
-        let invalidFields = {};
+        let invalidFields = {
+            ...!nameValidations(values.name) ? {name: 'name is required. max length 150 characters' } : {},
+            ...!emailValidations(values.email) ? { email: 'not valid email '} : {},
+            ...!messageValidations(values.message) ? { message: 'message is required' } : {},
+        };
 
-        if (!nameValidations(values.name)) {
-            invalidFields = {...invalidFields, name: false };
-        } 
-        
-        if (!emailValidations(values.email)) {
-            invalidFields = { ...invalidFields, email: false };
-        }
-
-        if (!messageValidations(values.message)) {
-            invalidFields = { ...invalidFields, message: false };
-        }
-
-        if (Object.keys(invalidFields).length === 0) {
-            setOpenContactModal(false);
-        } else {
-            setFormValidValues({...setFormValidValues});
-        }
+        console.log('here', nameValidations(values.name), Object.keys(invalidFields).length);
+        setModalState({
+            ...modalState,
+            values: { ...!(Object.keys(invalidFields).length === 0) ? {} : values },
+            isOpen: !(Object.keys(invalidFields).length === 0),
+            invalidValues: {...invalidFields}
+        });
     }
+    console.log('hre ==>');
     return (
         <SectionStyled>
             {
                 response.isFetching
                     ? 'loading'
                     : response.data &&
-                    <Details data={response} openContactModal={() => setOpenContactModal(true)} />
+                    <Details data={response}
+                        openContactModal={() =>
+                        setModalState({ ...modalState, invalidValues: {}, isOpen: true })}
+                    />
             }
             {
-                openContactModal
+                modalState.isOpen
                     && (<Modal
                             content={
                             <ContactForm
-                                onSubmit={() => onSubmitContactForm(formValues)}
-                                values={formValues}
+                                onSubmit={() => onSubmitContactForm(modalState.values)}
                                 onChange={(props) => {
-                                    setFormValues({ ...formValues, ...props })
+                                    setModalState({
+                                        ...modalState,
+                                        values: { ...modalState.values, ...props }
+                                    })
                                 }}
-                                validFields={formValidValues}
+                                invalidValues={modalState.invalidValues}
                             />
                         }
-                            onCloseModal={() => setOpenContactModal(false)}
+                            onCloseModal={() => {
+                                setModalState({ ...modalState, isOpen: false })
+                            }}
                         />)
-            }
+                    }
         </SectionStyled>
     )
 }

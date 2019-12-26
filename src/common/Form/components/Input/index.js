@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { $primaryColor } from '../../../../styles/constants';
+import { $primaryColor, $dangerColor } from '../../../../styles/constants';
 
 const InputStyled = styled.input`
     background: #FFFFFF;
@@ -11,6 +11,11 @@ const InputStyled = styled.input`
         border: 2px solid ${$primaryColor};
     }
 `;
+
+const InputSpanError = styled.span`
+    color:${$dangerColor};
+    width: 100%;
+`
 
 const Input = ({
     id,
@@ -33,7 +38,11 @@ const Input = ({
                 placeholder={placeholder}
                 type={type}
             />
-            {!isIvalid ? validationMessage || <span>not valid</span> : null}
+            {
+                !isIvalid
+                    ? <InputSpanError>{validationMessage || 'campo no válido'}</InputSpanError>
+                    : null
+            }
         </>
     );
 };
