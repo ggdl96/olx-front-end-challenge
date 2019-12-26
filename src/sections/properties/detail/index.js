@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { useAsyncFetch } from '../../../utils/axios';
@@ -185,15 +185,14 @@ export default function PropertyDetail(props) {
             ...!messageValidations(values.message) ? { message: 'message is required' } : {},
         };
 
-        console.log('here', nameValidations(values.name), Object.keys(invalidFields).length);
         setModalState({
             ...modalState,
-            values: { ...!(Object.keys(invalidFields).length === 0) ? {} : values },
+            values: { ...(Object.keys(invalidFields).length === 0) ? {} : values },
             isOpen: !(Object.keys(invalidFields).length === 0),
             invalidValues: {...invalidFields}
         });
-    }
-    console.log('hre ==>');
+    };
+
     return (
         <SectionStyled>
             {
